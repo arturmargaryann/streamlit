@@ -9,20 +9,20 @@ DB_FILE = "/tmp/hwbank_v3.json"
 
 SEED = {
     "users": {
-        "marina": {
-            "name": "Մарина Марgaryan", "initials": "ՄՄ", "pin": "1111", "color": "#a855f7",
+        "Մարինա": {
+            "name": "Մարինա Մարգարյան", "initials": "ՄՄ", "pin": "7628", "color": "#a855f7",
             "amd": 13029.20, "usd": 0.0, "eur": 0.0, "rub": 0.0,
             "card_bal": 1802.0, "card_num": "0355", "card_type": "VISA",
-            "has_loan": True, "loan_name": "Թankarzheq irerи...", "loan_amt": 349000, "loan_mo": 17,
+            "has_loan": True, "loan_name": "Թանկարժեք իրեր", "loan_amt": 349000, "loan_mo": 17,
             "sav_amd": 13029, "sav_usd": 0, "sav_eur": 0,
             "txs": [
-                {"icon": "🏪", "name": "CARREFOUR ARGISH...", "cat": "Gnум", "amt": -340, "date": "Today", "t": "18:04"},
-                {"icon": "🏪", "name": "HOME GROUP",         "cat": "Gnум", "amt": -220, "date": "Today", "t": "08:52"},
+                {"icon": "🏪", "name": "CARREFOUR ARGISH...", "cat": "ԳՆում", "amt": -340, "date": "Today", "t": "18:04"},
+                {"icon": "🏪", "name": "HOME GROUP",         "cat": "Գնում", "amt": -220, "date": "Today", "t": "08:52"},
                 {"icon": "💼", "name": "Salary",             "cat": "Income","amt": 50000,"date": "Apr 1","t": "09:00"},
             ]
         },
-        "artur": {
-            "name": "Artur Petrosyan", "initials": "ԱՊ", "pin": "2222", "color": "#3b82f6",
+        "Արթուր": {
+            "name": "Արթուր Մարգարյան", "initials": "ԱՄ", "pin": "2222", "color": "#3b82f6",
             "amd": 25000.0, "usd": 50.0, "eur": 10.0, "rub": 0.0,
             "card_bal": 5500.0, "card_num": "1122", "card_type": "VISA",
             "has_loan": False, "loan_name": "", "loan_amt": 0, "loan_mo": 0,
@@ -32,7 +32,7 @@ SEED = {
                 {"icon": "💼", "name": "Salary",       "cat": "Income",  "amt": 80000,"date": "Apr 1","t": "09:00"},
             ]
         },
-        "davit": {
+        "Դավիթ": {
             "name": "Davit Grigoryan", "initials": "ԴԳ", "pin": "3333", "color": "#10b981",
             "amd": 50000.0, "usd": 200.0, "eur": 0.0, "rub": 500.0,
             "card_bal": 12000.0, "card_num": "9988", "card_type": "MC",
@@ -510,7 +510,7 @@ def home_screen(uid):
     # Reveal / hide toggle + hidden shake trigger
     c1, c2 = st.columns([3, 2])
     with c1:
-        lbl = "🫣  Hide balance" if vis else "👁  Reveal balance"
+        lbl = "🫣  Hide balance" if vis else "👁  Ցույց տալ"
         st.markdown("<div class='rb'>", unsafe_allow_html=True)
         if st.button(lbl, key="togbal"):
             st.session_state.bal_vis = not vis
@@ -749,9 +749,9 @@ def transfer_screen(uid):
 
     # Transfer form
     st.markdown("<div class='card'>", unsafe_allow_html=True)
-    st.markdown("<div style='font-size:18px;font-weight:800;margin-bottom:16px'>New Transfer</div>",
+    st.markdown("<div style='font-size:18px;font-weight:800;margin-bottom:16px'>Նոր ԳումարՈՒՄ</div>",
                 unsafe_allow_html=True)
-    recv    = st.text_input("", placeholder="Recipient account (1001, 2001, 3001...)", key="recv")
+    recv    = st.text_input("", placeholder="Հաճախորդի ID", key="recv")
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
     amt_inp = st.text_input("", placeholder="Amount (֏)", key="amtinp")
     st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
@@ -760,16 +760,16 @@ def transfer_screen(uid):
 
     err_msg = None
     st.markdown("<div class='gb'>", unsafe_allow_html=True)
-    if st.button("💸  Send Money", key="dosend"):
+    if st.button("💸  ՈՒղարկել գումարը", key="dosend"):
         if not recv.strip():
             err_msg = "Enter recipient account"
         elif not amt_inp.strip():
-            err_msg = "Enter amount"
+            err_msg = "Գրել գումարը"
         else:
             try:
                 amount = float(amt_inp.strip().replace(",", "").replace("֏", "").strip())
                 if amount <= 0:
-                    err_msg = "Amount must be positive"
+                    err_msg = "Գումարը պետք է լինի ճիշտ"
                 else:
                     db2 = load_db()
                     su   = db2["users"][uid]
@@ -778,9 +778,9 @@ def transfer_screen(uid):
                     else:
                         ru = find_uid_by_acct(recv)
                         if not ru:
-                            err_msg = "Account not found"
+                            err_msg = "Չի գտնվել"
                         elif ru == uid:
-                            err_msg = "Cannot send to yourself"
+                            err_msg = "Չենք կարող ուղարկել"
                         else:
                             # Execute transfer
                             db2["users"][uid]["amd"] -= amount
